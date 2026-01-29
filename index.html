@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="A Diffusion Transformer Framework for Controllable Audio-Driven Editing of Talking Head Videos.">
+  <meta name="keywords" content="EditYourself, Video Editing, LipSync">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EditYourself</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9G7164STHL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-9G7164STHL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">EditYourself: Audio-Driven Generation and Manipulation of Talking Head Videos with Diffusion Transformers</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/johnpeterflynn/">John Flynn</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://wolfgangpaier.github.io/">Wolfgang Paier</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="#">Dimitar Dinev</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/primepake/">Sam Nhut Nguyen</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/hayk-poghosyan-793b97198/">Hayk Poghosyan</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#">Manuel Toribio</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#">Sandipan Banerjee</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://gafniguy.github.io/">Guy Gafni</a><sup>1</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Pipio AI,</span>
+              <span class="author-block"><sup>2</sup>Amazon</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://arxiv.org/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                <!-- Video Link. -->
+                <span class="link-block">
+                  <a href="https://www.youtube.com/" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                    </span>
+                    <span>Video</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Fal Link. -->
+                <span class="link-block">
+                  <a href="https://fal.ai/models/pipio/lipsync/playground"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="far fa-play-circle"></i>
+                    </span>
+                    <span>Try it on Fal.ai</span>
+                  </a>
+                  <!-- Pipio Link. -->
+                  <span class="link-block">
+                    <a href="https://docs.pipio.ai/dubbing-v2"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-bolt"></i>
+                      </span>
+                      <span>Try it on Pipio</span>
+                    </a>
+                  </span>
+              </div>
+
+              <div style="margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <a href="https://www.pipio.ai/" target="_blank" rel="noopener noreferrer"
+                  style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit;">
+                  <span>made with ❤️ and ☕ at</span> <img src="./static/images/logo-full_black.png" alt="Pipio"
+                    style="height: 3rem; width: auto; max-width: 100%; vertical-align: middle;">
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <image id="teaser" height="100%">
+          <source src="./static/images/teaser.png" type="image/png">
+        </image>
+        <h3 class="subtitle has-text-centered">
+          <span class="dnerf">EditYourself</span> is a diffusion-based video editing model for talking heads, enabling
+          transcript-driven lip-syncing, insertion, removal and retiming of speech while preserving identity and visual
+          fidelity.
+        </h3>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="hero is-small">
+    <div class="hero-body">
+      <div class="container">
+        <div id="results-carousel" class="carousel results-carousel">
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.webp" preload="auto" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.webp" preload="auto" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.webp" preload="auto" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.webp" preload="auto" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.webp" preload="metadata" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.webp" preload="metadata" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo-0F1owya2oo-scene20-scene1_122_audio4.webp" preload="metadata" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo-0F1owya2oo-scene20-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo-0F1owya2oo-scene20-scene1_122_audio4.webp" preload="metadata" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo-0F1owya2oo-scene20-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.webp" preload="metadata" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo-yatPC_es1k-scene113-scene1_3_00072.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo-yatPC_es1k-scene113-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo-yatPC_es1k-scene113-scene1_3_00072.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo-yatPC_es1k-scene113-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo0AidLp-9634-scene29-scene1_case-20.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo0AidLp-9634-scene29-scene1_case-20.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo0AidLp-9634-scene29-scene1_case-20.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo0AidLp-9634-scene29-scene1_case-20.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo0Al3nVMe7RU-scene24-scene1_ours.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo0Al3nVMe7RU-scene24-scene1_ours.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo0Al3nVMe7RU-scene24-scene1_ours.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo0Al3nVMe7RU-scene24-scene1_ours.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo0Shnw7JknMc-scene2-scene1_2_00023.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo0Shnw7JknMc-scene2-scene1_2_00023.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo0Shnw7JknMc-scene2-scene1_2_00023.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo0Shnw7JknMc-scene2-scene1_2_00023.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo12g12UU8oPQ-scene15-scene1_2_00023.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo12g12UU8oPQ-scene15-scene1_2_00023.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo12g12UU8oPQ-scene15-scene1_2_00023.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo12g12UU8oPQ-scene15-scene1_2_00023.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo1FwD_IyricY-scene75-scene1_case-1.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo1FwD_IyricY-scene75-scene1_case-1.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo1FwD_IyricY-scene75-scene1_case-1.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo1FwD_IyricY-scene75-scene1_case-1.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo2051_OafBkfrb5F0-scene12-scene1_3_00072.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo2051_OafBkfrb5F0-scene12-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo2051_OafBkfrb5F0-scene12-scene1_3_00072.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo2051_OafBkfrb5F0-scene12-scene1_3_00072.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Image-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_I2V/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_I2V/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+          <div class="item">
+            <span class="carousel-caption">Video-to-Video</span>
+            <div class="video-wrapper">
+              <video poster="./static/images/posters/EY_V2V/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.webp" preload="none" loop onmouseenter="this.controls=true" onmouseleave="this.controls=false" playsinline>
+                <source src="./static/videos/EY_V2V/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.mp4" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Table of Contents -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-max-desktop">
+          <h3 class="title is-3">Table of Contents</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="toc-menu" id="toc-menu">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="toc-content">
+          <ul class="toc-list">
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#video">Video</a></li>
+            <li><a href="#method">Method Overview</a></li>
+            <li><a href="#video-editing">Video Editing</a></li>
+            <li><a href="#v2v">Video-to-Video</a></li>
+            <li><a href="#i2v">Image-to-Video</a></li>
+            <li><a href="#long-video">Long Video Inference</a></li>
+            <li><a href="#about-pipio">About Us</a></li>
+            <li><a href="#bibtex">BibTeX</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <section class="section hero" id="abstract">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h3 class="title is-3">Abstract</h3>
+          <div class="content has-text-justified">
+            <span>Current generative video models excel at producing novel content from text and image prompts, but
+              leave a critical gap in editing existing pre-recorded videos, where minor alterations to the spoken script
+              require motion preservation, temporal coherence, speaker identity and lip synchronization.</span>
+            <span>We introduce EditYourself, a DiT-based framework for audio-driven Video-to-Video (V2V) editing that
+              enables transcript-based modification of talking head videos, including the seamless addition and removal
+              of spoken content. By adapting a pre-trained Image-to-Video (I2V) diffusion model to support
+              audio-conditioned V2V inference, EditYourself enables precise lip synchronization while maintaining visual
+              fidelity to the original video.</span>
+            <span>This work represents a foundational step toward transforming generative video models into practical
+              tools for professional video post-production.</span>
+          </div>
+        </div>
+      </div>
+      <!--/ Abstract. -->
+  </section>
+  <section class="section hero is-light" id="video">
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-three-fifths">
+        <h3 class="title is-3">Video</h3>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/xfnPoTXjDzU?rel=0&amp;showinfo=0" frameborder="0"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+    </div>
+  </section>
+  <section class="section" id="method">
+    <div class="columns is-centered has-text-centered" style="margin-top: 50px;">
+      <div class="column is-two-thirds">
+        <h3 class="title is-3">Method Overview</h3>
+        <div class="publication-image">
+          <img src="./static/images/method.png" alt="EditYourself Architecture"
+            style="width: 80%; margin-bottom: 20px;">
+          <div class="content has-text-justified is-size-6">
+            <p>
+              Our proposed pipeline. A global audio projection layer and an audio cross-attention layers are added to
+              the network's architecture. For V2V lip syncing, we noise tokens corresponding to the mouth area and task
+              the model with spatio-temporally inpainting them. Purple and orange flame symbols correspond to LoRA and
+              full training.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section hero is-light" id="video-editing">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered section-title">Video Editing</h3>
+      <p class="has-text-centered" style="margin-bottom: 40px;">
+        EditYourself supports transcript-based video editing, including the
+        addition of new footage and seamless removal of unwanted segments.
+      </p>
+
+      <!-- Addition Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Addition</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          Insertion of new content at arbitrary temporal locations, seamlessly adhering to surrounding boundary frames
+          (when present) while lip-syncing to modified audio.
+        </p>
+
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/additionp-zuckerberg_short_compare.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/additionp-zuckerberg_short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/addition-obama-short_compare.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/addition-obama-short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/addition-perry_short_26031986-muon4mpx_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/addition-perry_short_26031986-muon4mpx_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/addition-swift_short_26031986-muon4mpx_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/addition-swift_short_26031986-muon4mpx_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/addition_tim_cook_short_2_26031986-muon4mpx_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/addition_tim_cook_short_2_26031986-muon4mpx_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/uschi-new_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/uschi-new_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/addition/debate_edited_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/addition/debate_edited_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Removal Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Removal</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          Deletion of existing content while smoothing the resulting temporal discontinuity to avoid visible jump cuts.
+        </p>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-zuckerberg_short_compare.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-zuckerberg_short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-obama-short_compare.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-obama-short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-perry_short_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-perry_short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-swift_short_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-swift_short_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-tim_cook_short_2a_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-tim_cook_short_2a_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-tim_cook_short_2b_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-tim_cook_short_2b_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/removal/removal-bush_original_trim_compare.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/removal/removal-bush_original_trim_compare.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rerender Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Rerender</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          Selective re-rendering of video content over specified spatial and temporal regions, conditioned on updated
+          audio and text prompt (e.g., correcting an awkward facial expression or regenerating a hand gesture). </p>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-zuckerberg_short.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-zuckerberg_short.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-obama-short.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-obama-short.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-perry_short.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-perry_short.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-swift_short.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-swift_short.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-tim_cook_short_2_trim.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-tim_cook_short_2_trim.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-macron_davos_h264-Scene-044-cropped.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-macron_davos_h264-Scene-044-cropped.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-ursula_davos_h264-Scene-024_cropped.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-ursula_davos_h264-Scene-024_cropped.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/edit/rerender/rerender-bush_original_trim.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true"
+                  onmouseleave="this.controls=false" width="100%">
+                  <source src="./static/videos/edit/rerender/rerender-bush_original_trim.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero" id="v2v">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered section-title">Video-to-Video</h3>
+      <p class="has-text-centered" style="margin-bottom: 40px;">
+        Qualitative comparisons between EditYourself and leading open-source and proprietary solutions.
+      </p>
+
+      <!-- Open Source Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Open Source</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          <a style="color: #3273dc" href="https://meigen-ai.github.io/InfiniteTalk/">InfiniteTalk</a>,
+          <a style="color: #3273dc" href="https://github.com/bytedance/LatentSync/">LatentSync</a>,
+          <a style="color: #3273dc" href="https://github.com/TMElyralab/MuseTalk/">MuseTalk</a>.
+        </p>
+
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo-0F1owya2oo-scene20-scene1_122_audio4.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo-0F1owya2oo-scene20-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo-Je0pbfgpJQ-scene13-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo-yatPC_es1k-scene113-scene1_3_00072.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo-yatPC_es1k-scene113-scene1_3_00072.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo0AidLp-9634-scene29-scene1_case-20.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo0AidLp-9634-scene29-scene1_case-20.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo0Al3nVMe7RU-scene24-scene1_ours.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo0Al3nVMe7RU-scene24-scene1_ours.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo0Shnw7JknMc-scene2-scene1_2_00023.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo0Shnw7JknMc-scene2-scene1_2_00023.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo12g12UU8oPQ-scene15-scene1_2_00023.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo12g12UU8oPQ-scene15-scene1_2_00023.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo1FwD_IyricY-scene75-scene1_case-1.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo1FwD_IyricY-scene75-scene1_case-1.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/OS/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/OS/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Closed Source Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Closed Source</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          <a style="color: #3273dc" href="https://creatify.ai/">Creatify Lip Sync</a>,
+          <a style="color: #3273dc" href="https://app.pixverse.ai/">PixVerse</a>,
+          <a style="color: #3273dc" href="https://sync.so/">SyncLabs React-1</a>,
+          <a style="color: #3273dc" href="https://sync.so/">SyncLabs lipsync-2-pro</a>,
+          <a style="color: #3273dc" href="https://www.veed.io/">VEED Fabric</a>.
+        </p>
+
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo-9cW4Gcn5WY-scene56-scene3_videovideo_xi5sXNAH7pE-scene21-scene4.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo-9cW4Gcn5WY-scene56-scene3_videovideo_xi5sXNAH7pE-scene21-scene4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo-C_5hzJCHaY-scene90-scene1_videovideo_3ztAVdBYCQY-scene82-scene8.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo-C_5hzJCHaY-scene90-scene1_videovideo_3ztAVdBYCQY-scene82-scene8.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo-kSrEC5Bqy0-scene114-scene2_videovideo2WkNSYJwNgU-scene22-scene35.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo-kSrEC5Bqy0-scene114-scene2_videovideo2WkNSYJwNgU-scene22-scene35.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo-ufXB1l_nDw-scene171-scene5_videovideoAI_UMnTM4o8-scene130-scene5.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo-ufXB1l_nDw-scene171-scene5_videovideoAI_UMnTM4o8-scene130-scene5.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo1083_kHcKSUyZ_Qg-scene15-scene1_videovideo3591_96GQTPc5PiU-scene467-scene4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo1083_kHcKSUyZ_Qg-scene15-scene1_videovideo3591_96GQTPc5PiU-scene467-scene4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo1124_P9t3AZDVfT0-scene13-scene1_videovideoR2iII1V5_oM-scene83-scene14.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo1124_P9t3AZDVfT0-scene13-scene1_videovideoR2iII1V5_oM-scene83-scene14.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/V2V/CS/videovideo112kOHNDDgQ-scene52-scene3_videovideo2Lv9OhESpw0-scene68-scene2.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/V2V/CS/videovideo112kOHNDDgQ-scene52-scene3_videovideo2Lv9OhESpw0-scene68-scene2.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="i2v">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered section-title">Image-to-Video</h3>
+      <p class="has-text-centered" style="margin-bottom: 40px;">
+        Qualitative comparisons between EditYourself and leading open-source and proprietary solutions.
+      </p>
+
+      <!-- Open Source Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Open Source</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          <a style="color: #3273dc" href="https://fudan-generative-vision.github.io/hallo3/">Hallo3</a>,
+          <a style="color: #3273dc" href="https://meigen-ai.github.io/InfiniteTalk/">InfiniteTalk</a>,
+          <a style="color: #3273dc" href="https://jixiaozhong.github.io/Sonic/">Sonic</a>,
+          <a style="color: #3273dc" href="https://francis-rings.github.io/StableAvatar/">StableAvatar</a>.
+        </p>
+
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo-0F1owya2oo-scene20-scene1_122_audio4.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo-0F1owya2oo-scene20-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo-yatPC_es1k-scene113-scene1_3_00072.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo-yatPC_es1k-scene113-scene1_3_00072.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo0AidLp-9634-scene29-scene1_case-20.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo0AidLp-9634-scene29-scene1_case-20.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo0Al3nVMe7RU-scene24-scene1_ours.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo0Al3nVMe7RU-scene24-scene1_ours.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo0AvHEwYHsCo-scene106-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo0Shnw7JknMc-scene2-scene1_2_00023.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo0Shnw7JknMc-scene2-scene1_2_00023.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1189_De9wq1vFUVo-scene108-scene1_ours.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1191_pACBs8Yi4lA-scene73-scene1_122_audio4.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo12g12UU8oPQ-scene15-scene1_2_00023.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo12g12UU8oPQ-scene15-scene1_2_00023.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1440_iC5dWobPSik-scene7-scene1_7_0007.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1506_v5S9zC348W0-scene47-scene1_2_audio_background.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1582_4WmW1e2GD8U-scene29-scene1_3_00072.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1855_XywPgvr9vuk-scene208-scene1_case-20.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo1FwD_IyricY-scene75-scene1_case-1.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo1FwD_IyricY-scene75-scene1_case-1.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/OS/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/OS/videovideo2086_q7uWz3g0TLc-scene12-scene1_7_0007.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Closed Source Subsection -->
+      <div style="margin-bottom: 50px;">
+        <h4 class="title is-4 has-text-centered" style="margin-bottom: 1rem;">Closed Source</h4>
+        <p class="has-text-centered" style="margin-bottom: 40px;">
+          <a style="color: #3273dc" href="https://creatify.ai">Aurora</a>,
+          <a style="color: #3273dc" href="https://www.veed.io/">VEED Fabric</a>,
+          <a style="color: #3273dc" href="https://app.klingai.com/">Kling AI</a>,
+          <a style="color: #3273dc" href="https://www.byteplus.com/">OmniHuman 1.5</a>.
+        </p>
+
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/CS/iv2_1.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/CS/iv2_1.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/CS/i2v_2.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/CS/i2v_2.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/CS/i2v_3.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/CS/i2v_3.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div style="margin-bottom: 2rem;">
+              <div class="video-container">
+                <video poster="./static/images/posters/I2V/CS/i2v_5.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                  width="100%"><source src="./static/videos/I2V/CS/i2v_5.mp4"
+                    type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero" id="long-video">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered section-title">Long Video Inference</h3>
+      <p class="has-text-centered" style="margin-bottom: 40px;">
+        EditYourself is capable of generating minutes-long videos without noticeable identity drift. This section also provide a comparison with open source and proprietary solutions:           
+        <a style="color: #3273dc" href="https://fal.ai/models/fal-ai/ai-avatar/">MultiTalk AI Avatar</a>,
+        <a style="color: #3273dc" href="https://creatify.ai">Aurora</a>,
+        <a style="color: #3273dc" href="https://hunyuanvideo-avatar.github.io/">HunyuanAvatar</a>,
+        <a style="color: #3273dc" href="https://app.klingai.com/">Kling AI Avatar v2 Pro</a>,
+        <a style="color: #3273dc" href="https://www.byteplus.com/">OmniHuman 1.5</a>,
+        <a style="color: #3273dc" href="https://francis-rings.github.io/StableAvatar/">StableAvatar</a>.
+
+      </p>
+
+      <div class="columns is-centered">
+        <div class="column">
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/1.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/1.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/2.webp" preload="metadata" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/2.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/3.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/3.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/4.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/4.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/5.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/5.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/6.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/6.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 2rem;">
+            <div class="video-container">
+              <video poster="./static/images/posters/long/I2V/CS/7.webp" preload="none" loop="" playsinline="" onmouseenter="this.controls=true" onmouseleave="this.controls=false"
+                width="100%"><source src="./static/videos/long/I2V/CS/7.mp4"
+                  type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light" id="about-pipio">
+    <div class="container is-max-desktop">
+      <h3 class="title is-3 has-text-centered section-title">About Us</h3>
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div class="content has-text-centered">
+            <a href="https://www.pipio.ai/" target="_blank" rel="noopener noreferrer">
+              <img src="./static/images/logo-full_black.png" alt="Pipio" style="height: 4rem; margin-bottom: 1.5rem;">
+            </a>
+            <p class="has-text-justified">
+              <a href="https://www.pipio.ai/" style="color: #3273dc; font-weight: bold;">Pipio</a> is a human-first, AI powered video editor that keeps creators in control. While others replace, Pipio enhances. Seamlessly adjust your performance without ever having to re-record your footage.
+            </p>
+            <p class="has-text-justified">
+              EditYourself represents our latest advancement in audio-driven video generation and editing, bringing state-of-the-art diffusion transformer architectures to practical video production workflows.
+            </p>
+            <div style="margin-top: 2rem;">
+              <a href="https://www.pipio.ai/" class="button is-link is-medium" style="margin-right: 1rem;">
+                <span class="icon"><i class="fas fa-globe"></i></span>
+                <span>Visit Pipio</span>
+              </a>
+              <a href="https://docs.pipio.ai/dubbing-v2" class="button is-dark is-medium" style="margin-right: 1rem;">
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>API Docs</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop content">
+      <h3 class="title">BibTeX</h3>
+      <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <a class="icon-link" href="./static/videos/nerfies_paper.pdf">
+          <i class="fas fa-file-pdf"></i>
+        </a>
+        <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              This means you are free to borrow the <a href="https://github.com/nerfies/nerfies.github.io">source
+                code</a> of this website,
+              we just ask that you link back to this page in the footer.
+              Please remember to remove the analytics code included in the header of the website which
+              you do not want on your website.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
