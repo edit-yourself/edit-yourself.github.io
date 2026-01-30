@@ -1,14 +1,17 @@
-# Nerfies
+# EditYourself
 
-This is the repository that contains source code for the [Nerfies website](https://nerfies.github.io).
+This is the repository for the webpage: [EditYourself]([https://nerfies.github.io](https://edit-yourself.github.io/)).
 
-If you find Nerfies useful for your work please cite:
+If you find EditYourself useful for your work please cite:
 ```
-@article{park2021nerfies
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+@article{flynn2026edityourself,
+      title={EditYourself: Audio-Driven Generation and Manipulation of Talking Head Videos with Diffusion Transformers}, 
+      author={John Flynn and Wolfgang Paier and Dimitar Dinev and Sam Nhut Nguyen and Hayk Poghosyan and Manuel Toribio and Sandipan Banerjee and Guy Gafni},
+      year={2026},
+      eprint={2601.22127},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2601.22127}, 
 }
 ```
 
