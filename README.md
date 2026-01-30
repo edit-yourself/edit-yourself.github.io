@@ -1,6 +1,7 @@
 # EditYourself
 
-This is the repository for the webpage: [EditYourself]([https://nerfies.github.io](https://edit-yourself.github.io/)).
+This is the repository for the webpage: [EditYourself](https://edit-yourself.github.io/)
+
 
 If you find EditYourself useful for your work please cite:
 ```
