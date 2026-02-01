@@ -7,6 +7,11 @@ body {
     font-size: 25px;
     color: #000;
 }
+.footer .icon-link.is-disabled {
+    color: #9a9a9a;
+    cursor: not-allowed;
+    pointer-events: none;
+}
 
 .link-block a {
     margin-top: 5px;
